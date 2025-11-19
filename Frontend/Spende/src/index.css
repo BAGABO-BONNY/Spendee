@@ -17,3 +17,9 @@
     overflow-x:hidden ;
   }
 }
+.input-box{
+  @apply w-full  flex justify-between gap-3 text-sm text-black bg-slate-100 rounded px-4 py-3 border border-slate-200 outline-none;
+}
+.btn-primary{
+  @apply w-full text-sm font-medium text-white bg-green-800  shadow-lg shadow-purple-600/5  p-2.5 rounded-md  my-2   hover:bg-green-600/50 hover:text-green-900 cursor-pointer ;         
+}
