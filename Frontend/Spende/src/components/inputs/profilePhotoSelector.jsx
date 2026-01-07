@@ -1,9 +1,8 @@
 import React from "react";
 import { LuUser, LuUpload, LuTrash } from "react-icons/lu";
 
-const ProfilePhotoSelector = () => {
+const ProfilePhotoSelector = ({image,setImage}) => {
   const inputRef = React.useRef(null);
-  const [image, setImage] = React.useState(null);
   const [previewUrl, setPreviewUrl] = React.useState(null);
 
   const handleImageChange = (event) => {
@@ -14,6 +13,7 @@ const ProfilePhotoSelector = () => {
 
       //Generate preview from URL from the file
       const previewUrl = URL.createObjectURL(file);
+      setPreviewUrl(previewUrl);
     }
   };
   const handleRemoveImage = () => {
@@ -24,7 +24,7 @@ const ProfilePhotoSelector = () => {
     inputRef.current.click();
   };
   return (
-    <div className="mb-6 flex justify-center">
+    <div className="flex justify-center mb-6 ">
       <input
         type="file"
         accept="image/*"
@@ -33,8 +33,8 @@ const ProfilePhotoSelector = () => {
         className="hidden"
       />
       {!image ? (
-        <div className="w-20 h-20 items-center justify-center bg-green-100 rounded-full relative">
-          <LuUser className="text-4xl text-primary" />
+        <div className="w-20 h-20 flex items-center justify-center bg-green-100 rounded-full relative">
+          <LuUser className="text-4xl text-primary " />
 
           <button
             type="button"
@@ -49,11 +49,11 @@ const ProfilePhotoSelector = () => {
           <img
             src={previewUrl}
             alt="profile photo"
-            className="w-20 h-20 rounded-full object-cover"
+            className="w-20 h-20 rounded-full object-cover "
           />
           <button
             type="button"
-            className="w-8 h-8 flex items-center bg-red-500 text-white rounded-full absolute -bottom-1 -right-1 "
+            className="w-8 h-8 flex items-center justify-center bg-orange-500 text-white rounded-full absolute -bottom-1 -right-1 cursor-pointer"
             onClick={handleRemoveImage}
           >
             <LuTrash />
