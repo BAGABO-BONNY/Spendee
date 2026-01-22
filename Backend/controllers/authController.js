@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 //generate jwt token
 const generateToken = (id) => {
@@ -14,14 +15,14 @@ exports.registerUser = async (req, res) => {
     if (!fullName || !email || !password) {
         return res.status(400).json({ message: 'Please provide all required fields' });
     }
-    try{
+    try {
         // check if email already exists
-        const existingUser= await User.findOne({ email });
-        if(existingUser){
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
             return res.status(400).json({ message: 'Email already in use' });
         }
         // create new user
-        const user= await User.create({
+        const user = await User.create({
             fullName,
             email,
             password,
@@ -33,8 +34,8 @@ exports.registerUser = async (req, res) => {
             token: generateToken(user._id),
         });
     }
-    catch(error){
-        res.status(500).json({ message: 'Error registering user',error: error.message})
+    catch (error) {
+        res.status(500).json({ message: 'Error registering user', error: error.message })
     }
 };
 
@@ -46,12 +47,12 @@ exports.loginUser = async (req, res) => {
         return res.status(400).json({ message: 'Please provide all required fields' });
 
     try {
-        const user = await User.findOne({ email });   
+        const user = await User.findOne({ email });
 
-        if (!user) 
+        if (!user)
             return res.status(401).json({ message: 'Invalid email or password' });
 
-        const isMatch = await user.comparePassword(password);  
+        const isMatch = await user.comparePassword(password);
 
         if (!isMatch)
             return res.status(401).json({ message: 'Invalid email or password' });
@@ -70,14 +71,42 @@ exports.loginUser = async (req, res) => {
 
 // User
 exports.getUserInfo = async (req, res) => {
-    try{
+    try {
         const user = await User.findById(req.user.id).select('-password');
-        if(!user){
+        if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
         res.status(200).json(user);
     }
-    catch(error){
+    catch (error) {
         res.status(500).json({ message: 'Error fetching user info', error: error.message });
+    }
+};
+
+exports.uploadProfileImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+
+        const profileImageUrl = `/uploads/${req.file.filename}`;
+
+        const user = await User.findByIdAndUpdate(
+            req.user.id,
+            { profileImageUrl },
+            { new: true }
+        ).select('-password');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({
+            message: 'Profile image uploaded successfully',
+            profileImageUrl: user.profileImageUrl,
+            user,
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error uploading profile image', error: error.message });
     }
 };
