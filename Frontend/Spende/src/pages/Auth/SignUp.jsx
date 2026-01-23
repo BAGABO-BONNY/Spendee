@@ -5,6 +5,9 @@ import Input from "../../components/inputs/input";
 import { Link } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
 import ProfilePhotoSelector from "../../components/inputs/profilePhotoSelector";
+import { useUser } from "../../context/UserContext";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState(null);
@@ -12,11 +15,14 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { register } = useUser();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!fullName) {
       setError("Please enter your full name");
@@ -26,12 +32,33 @@ const SignUp = () => {
       setError("Please enter a valid email address");
       return;
     }
-    if (!password) {
-      setError("Please enter the Password ");
+    if (!password || password.length < 8) {
+      setError("Password must be at least 8 characters");
       return;
     }
-    setError("");
-    // Login API call
+
+    setLoading(true);
+    const result = await register(fullName, email, password, profilePic);
+    setLoading(false);
+
+    if (result.success) {
+      if (profilePic) {
+        try {
+          const formData = new FormData();
+          formData.append('profileImage', profilePic);
+          await axiosInstance.post(API_PATHS.auth.uploadProfile, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        } catch (uploadError) {
+          console.log('Profile image upload failed, but registration was successful');
+        }
+      }
+      navigate('/dashboard');
+    } else {
+      setError(result.error || 'Registration failed. Please try again.');
+    }
   };
   return (
     <AuthLayout>
@@ -70,8 +97,8 @@ const SignUp = () => {
             </div>
           </div>
           {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
-          <button type="submit" className="btn-primary">
-            Sign Up
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'SIGNING UP...' : 'SIGN UP'}
           </button>
           <p className="text-[13px] text-slate-800 mt-3">
             Already have an account?{" "}

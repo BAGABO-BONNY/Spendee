@@ -4,15 +4,21 @@ import { useNavigate } from "react-router-dom";
 import Input from "../../components/inputs/input";
 import { Link } from "react-router-dom";
 import { validateEmail } from "../../utils/helper";
+import { useUser } from "../../context/UserContext";
 
 const Login = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [error, setError] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
 
   const navigate = useNavigate();
+  const { login } = useUser();
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+    
     if(!validateEmail(email)){
       setError("Please enter a valid email address");
       return;
@@ -21,8 +27,16 @@ const Login = () => {
       setError("Please enter the Password ");
       return;
     }
-    setError("");
-    // Login API call
+
+    setLoading(true);
+    const result = await login(email, password);
+    setLoading(false);
+
+    if (result.success) {
+      navigate('/dashboard');
+    } else {
+      setError(result.error || 'Login failed. Please try again.');
+    }
   };
   return (
     <AuthLayout>
@@ -52,8 +66,8 @@ const Login = () => {
   />
 </div>
           {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
-          <button type="submit" className="btn-primary">
-            LOGIN
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'LOGGING IN...' : 'LOGIN'}
           </button>
           <p className="text-[20px] text-slate-800 mt-3">
             Don't have an account?{" "}

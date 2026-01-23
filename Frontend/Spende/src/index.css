@@ -1,25 +1,177 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme{
+  --font-family-inter: 'Inter', sans-serif;
   --font-family-poppins: 'Poppins', sans-serif;
   --breakpoint-3xl: 1920px;
   --color-primary:  #10b981;
+  --color-primary-dark: #059669;
+  --color-primary-light: #34d399;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
 @layer base{
+  * {
+    font-family: var(--font-sans);
+  }
   html{
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body{
-    background-color:#fcfbfc;
-    overflow-x:hidden ;
+    background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f8 100%);
+    overflow-x: hidden;
+    color: #1f2937;
   }
 }
+
 .input-box{
-  @apply w-full  flex justify-between gap-3 text-sm text-black bg-slate-100 rounded px-4 py-3 border border-slate-200 outline-none;
+  @apply w-full flex justify-between gap-3 text-sm text-gray-800 bg-white rounded-xl px-4 py-3.5 border border-gray-200 outline-none transition-all duration-200;
+  @apply focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 shadow-sm;
 }
+
 .btn-primary{
-  @apply w-full text-sm font-medium text-white bg-green-800  shadow-lg shadow-purple-600/5  p-2.5 rounded-md  my-2   hover:bg-green-600/50 hover:text-green-900 cursor-pointer ;         
+  @apply w-full text-sm font-semibold text-white bg-gradient-to-r from-primary to-primary-dark;
+  @apply shadow-lg shadow-primary/30 rounded-xl py-3.5 my-2;
+  @apply hover:shadow-xl hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-200;
+  @apply active:scale-[0.98] cursor-pointer;
+}
+
+.card {
+  @apply bg-white rounded-2xl shadow-sm border border-gray-100;
+  @apply hover:shadow-md transition-shadow duration-300;
+}
+
+.glass-effect {
+  @apply bg-white/80 backdrop-blur-lg border border-white/20;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #10b981, #059669);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #059669, #047857);
+}
+
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.8s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out;
+}
+
+.animate-fade-in-delay {
+  animation: fade-in 1s ease-out 0.3s both;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fade-in 1s ease-out 0.6s both;
+}
+
+.animate-slide-up-delay {
+  animation: slide-up 0.8s ease-out 0.4s both;
+}
+
+.animate-bounce-slow {
+  animation: bounce 3s infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+.animate-gradient {
+  background-size: 200% auto;
+  animation: gradient 3s linear infinite;
+}
+
+.floating-shape {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.4), rgba(5, 150, 105, 0.35));
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.4), 0 0 60px rgba(16, 185, 129, 0.2);
+  animation: float 15s infinite ease-in-out;
+  border: 2px solid rgba(16, 185, 129, 0.2);
 }

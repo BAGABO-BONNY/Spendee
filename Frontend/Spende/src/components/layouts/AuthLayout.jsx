@@ -1,12 +1,16 @@
 import React from "react";
 import CARD_2 from "../../assets/images/card2.png";
-import { LuTrendingUpDown } from "react-icons/lu";    
+import { LuTrendingUpDown } from "react-icons/lu";
+import logo from "../../assets/logo (2).png";    
 
 const AuthLayout = ({ children }) => {
   return (
     <div className="flex">
       <div className="w-screen h-screen md:w-[60vw] px-12 pt-8 pb-12">
-        <h2 className="text-lg font-medium text-black">SPENDEE</h2>
+        <div className="flex items-center gap-3 mb-8">
+          <img src={logo} alt="Spendee Logo" className="h-30 w-30 object-contain drop-shadow-lg" />
+          <h2 className="text-2xl font-bold text-black">SPENDEE</h2>
+        </div>
         {children}
       </div>
       <div className="hidden md:block w-[40vw] h-screen bg-violet-50 bg-auth-bg-img bg-cover bg-no-repeat bg-center overflow-hidden p-8 relative">
