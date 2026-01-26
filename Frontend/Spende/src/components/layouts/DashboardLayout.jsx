@@ -83,7 +83,7 @@ const DashboardLayout = ({ children }) => {
             <div className="flex items-center gap-3 mb-4 p-4 bg-linear-to-r from-gray-50 to-gray-100 rounded-xl border border-gray-200">
               {user?.profileImageUrl ? (
                 <img
-                  src={`http://localhost:5000${user.profileImageUrl}`}
+                  src={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}${user.profileImageUrl}`}
                   alt={user.fullName}
                   className="w-10 h-10 rounded-full object-cover"
                 />
